@@ -31,25 +31,6 @@ GAN_generator.eval()
 print('model:',GAN_generator)
 
 
-# ---Calculate parameters---
-from fvcore.nn import FlopCountAnalysis, parameter_count_table
-Parameters = parameter_count_table(GAN_generator)
-print('Parameters:', Parameters)
-
-
-def print_model_parm_nums(model):
-    total = sum([param.nelement() for param in model.parameters()])
-    print('  + Number of params: %.2fM' % (total / 1e6))
-
-Parameters_sum=print_model_parm_nums(model.netG)
-# --------------- Calculate FLOPs based on torchprofile ---------------
-import torch
-from torchprofile import profile_macs
-
-input = torch.ones(1, 3, 256, 256)
-macs = profile_macs(GAN_generator, input)     #  torch.Tensor([1.0]), torch.Tensor([0.5])
-print(('FLOPs:{} k'.format(str(macs / (1000 ** 2))[:6])))
-
 def get_transform():
     transform_list = []
     transform_list += [transforms.ToTensor()]
@@ -92,12 +73,12 @@ def picture_strengthen(file_path):
     # save_file_path = file_path.replace(format, "_strengthen" + format)
     save_file_path = os.path.join(save_dir,os.path.split(file_path)[-1])
     cv2.imencode(format, image_numpy[:,:,::-1])[1].tofile(save_file_path)
-    ------------------------------save end----------------------------------
-    ------------------------------for test ---------------------------------
-    format = os.path.splitext(file_path)[-1]
-    save_file_path = os.path.join(save_dir, os.path.split(file_path)[-1])
-    cv2.imencode(format, final_img[:, :, ::-1])[1].tofile(save_file_path)
-    ------------------------------save end----------------------------------
+    # ------------------------------save end----------------------------------
+    # ------------------------------for test ---------------------------------
+    # format = os.path.splitext(file_path)[-1]
+    # save_file_path = os.path.join(save_dir, os.path.split(file_path)[-1])
+    # cv2.imencode(format, final_img[:, :, ::-1])[1].tofile(save_file_path)
+    # ------------------------------save end----------------------------------
 
 if __name__=='__main__':
     src_dir=r'datasets/Change of Volfrac/input/Chang of Volfrac_TO_test'

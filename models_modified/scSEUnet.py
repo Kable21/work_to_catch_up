@@ -31,7 +31,7 @@ class sSE(nn.Module):
     def forward(self, U):
         q = self.Conv1x1(U)         # U:[bs,c,h,w] to q:[bs,1,h,w]
         q = self.sigmoid(q)
-        return U * q                # 广播机制
+        return U * q
 
 class scSE(nn.Module):
     def __init__(self, in_channels):
@@ -55,7 +55,7 @@ class inconv(nn.Module):
         x = self.conv(x)
         return x
 
-#  standard MaxPool+Doubel Conv of Unet
+#  标准的Unet的MaxPool+Doubel Conv
 class unet_down(nn.Module):
     def __init__(self, in_ch, out_ch, have_scSE=False):
         super(unet_down, self).__init__()
@@ -74,7 +74,7 @@ class unet_down(nn.Module):
         x = self.mpconv(x)
         return x
 
-#  Standard Upsample or ConvTranspose2d+Doubel Conv of Unet
+#  标准的Unet的Upsample或ConvTranspose2d+Doubel Conv
 class unet_up(nn.Module):
     def __init__(self, in_ch, out_ch, mode='ConvTranspose2d', have_scSE=False):
         """
