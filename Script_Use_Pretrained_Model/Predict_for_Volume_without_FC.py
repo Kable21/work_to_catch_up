@@ -12,15 +12,14 @@ from data import create_dataset
 from models import create_model
 
 size = (256, 256)
-# Set cpu或GPU
+# Set cpu OR GPU
 # device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 device = torch.device('cpu')
 # Load Models
 # model_path=r'400_net_G_3_512_512_jit.pt'
-# ---------------**********************8_________________
+# ---------------**********************_________________
 # model_path=r'Ensemble_pix2pix_ori/200_net_G_3_256_256_jit.pt'
-model_path=r'checkpoints/pix2pix_combined_volfrac256/150_net_G.pth'
-opt = TrainOptions().parse()   # get training options
+model_path=r'D:\GAN\pytorch-CycleGAN-and-pix2pix\295_net_G.pth'
 
 if '_jit.pt' in model_path:
     GAN_generator = torch.jit.load(model_path, map_location='cpu').to(device)
@@ -81,8 +80,8 @@ def picture_strengthen(file_path):
     # ------------------------------save end----------------------------------
 
 if __name__=='__main__':
-    src_dir=r'datasets/Change of Volfrac/input/Chang of Volfrac_TO_test'
-    save_dir=src_dir+'_Ori_pix2pix_predicts_epoch_epoch_150' #{}'.format(os.path.split(model_path)[-1][:3])'
+    src_dir=r'D:\GAN\pytorch-CycleGAN-and-pix2pix\Report_data\AR'
+    save_dir=src_dir+'_pix2pix_FC_predicts_catt'.format(os.path.split(model_path)[-1][:4])
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     file_list=os.listdir(src_dir)

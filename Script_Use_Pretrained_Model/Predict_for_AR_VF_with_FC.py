@@ -10,6 +10,7 @@ import cv2
 from options.train_options import TrainOptions
 from data import create_dataset
 from models import create_model
+import time
 
 size = (256, 256)
 # Set cpu or GPU
@@ -18,7 +19,7 @@ device = torch.device("cpu")
 # Load Model
 # model_path=r'400_net_G_3_512_512_jit.pt'
 # model_path=r'checkpoints/GAN_Control_Ensemble_pix2pix_aligned_Resnet256/200_net_G.pth'
-model_path=r'GAN_Control_Ensemble_pix2pix_aligned_Resnet_catt_256_jit/295_net_G_3_256_256_jit.pt'
+model_path=r'FFCF_Models/295_net_G_3_256_256_jit.pt'
 # model_path=r'checkpoints/GAN_Control_Ensemble_pix2pix_aligned_Resnet256/400_net_G_params.pth'
 
 if '_jit.pt' in model_path:
@@ -86,13 +87,16 @@ def picture_strengthen(file_path):
     # ------------------------------save end----------------------------------
 
 if __name__=='__main__':
-    src_dir=r'datasets/Change of AR/Test/Change of AR_TO_test'
-    save_dir=src_dir+'_pix2pix_Ours_predicts_catt_{}'.format(os.path.split(model_path)[-1][:4])
+    src_dir=r'Report_data\AR'
+    save_dir=src_dir+'_pix2pix_Ori_{}'.format(os.path.split(model_path)[-1][:4])
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     file_list=os.listdir(src_dir)
     for file in file_list:
         file_path=os.path.join(src_dir,file)
+        starttime=time.time()
         picture_strengthen(file_path)
+        endtime=time.time()
+        print('time:',str(endtime-starttime))
     print('save_dir:',save_dir)
 
