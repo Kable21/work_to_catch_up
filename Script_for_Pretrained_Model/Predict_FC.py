@@ -10,25 +10,36 @@ import cv2
 from options.train_options import TrainOptions
 from data import create_dataset
 from models import create_model
-import time
 
 size = (256, 256)
 # Set cpu or GPU
 # device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 device = torch.device("cpu")
 # Load Model
-# model_path=r'400_net_G_3_512_512_jit.pt'
 # model_path=r'checkpoints/GAN_Control_Ensemble_pix2pix_aligned_Resnet256/200_net_G.pth'
-model_path=r'FFCF_Models/295_net_G_3_256_256_jit.pt'
-# model_path=r'checkpoints/GAN_Control_Ensemble_pix2pix_aligned_Resnet256/400_net_G_params.pth'
-
+model_path=r"C:\Users\KABLE21\Desktop\Shared_Results\Trained_model\295_net_G_3_256_256_FC_jit.pt"
+starttime_load = time.time()
 if '_jit.pt' in model_path:
     GAN_generator = torch.jit.load(model_path, map_location='cpu').to(device)
 else:
     GAN_generator = torch.load(model_path, map_location='cpu').to(device)
 GAN_generator.eval()
+endtime_load = time.time()
 print('model:',GAN_generator)
+print('loadtime:',round(endtime_load-starttime_load,2))
 
+
+# ---Calculate parameters---
+# from fvcore.nn import FlopCountAnalysis, parameter_count_table
+# Parameters = parameter_count_table(GAN_generator)
+# print('Parameters:', Parameters)
+
+#
+# def print_model_parm_nums(model):
+#     total = sum([param.nelement() for param in model.parameters()])
+#     print('  + Number of params: %.2fM' % (total / 1e6))
+#
+# Parameters_sum=print_model_parm_nums(model.netG)
 
 def get_transform():
     transform_list = []
@@ -53,8 +64,7 @@ def picture_strengthen(file_path):
 
     # remove 0 chanel
     img = img.unsqueeze(0).to(device)
-    #  forward transfer
-    #
+    #  forward propagation
     if '-' in file_path:
         file_path=file_path.replace('-','')
     A,B,VR=os.path.split(file_path)[-1][:-4].split('_')[:3]
@@ -87,16 +97,17 @@ def picture_strengthen(file_path):
     # ------------------------------save end----------------------------------
 
 if __name__=='__main__':
-    src_dir=r'Report_data\AR'
-    save_dir=src_dir+'_pix2pix_Ori_{}'.format(os.path.split(model_path)[-1][:4])
+    src_dir=r'D:\GAN\pytorch-CycleGAN-and-pix2pix\Report_data\AR'
+    save_dir=src_dir+'_pix2pix_FC_predicts'.format(os.path.split(model_path)[-1][:4])
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     file_list=os.listdir(src_dir)
+
     for file in file_list:
-        file_path=os.path.join(src_dir,file)
-        starttime=time.time()
+        file_path = os.path.join(src_dir, file)
+        starttime = time.time()
         picture_strengthen(file_path)
-        endtime=time.time()
-        print('time:',str(endtime-starttime))
+        endtime = time.time()
+        print(file,'_time:', round(endtime - starttime,2))
     print('save_dir:',save_dir)
 

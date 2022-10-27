@@ -19,7 +19,7 @@ device = torch.device('cpu')
 # model_path=r'400_net_G_3_512_512_jit.pt'
 # ---------------**********************_________________
 # model_path=r'Ensemble_pix2pix_ori/200_net_G_3_256_256_jit.pt'
-model_path=r'D:\GAN\pytorch-CycleGAN-and-pix2pix\295_net_G.pth'
+model_path=r'D:\GAN\pytorch-CycleGAN-and-pix2pix\Ensemble_pix2pix_ori\295_net_G_3_256_256_jit.pt'
 
 if '_jit.pt' in model_path:
     GAN_generator = torch.jit.load(model_path, map_location='cpu').to(device)
@@ -81,12 +81,15 @@ def picture_strengthen(file_path):
 
 if __name__=='__main__':
     src_dir=r'D:\GAN\pytorch-CycleGAN-and-pix2pix\Report_data\AR'
-    save_dir=src_dir+'_pix2pix_FC_predicts_catt'.format(os.path.split(model_path)[-1][:4])
+    save_dir=src_dir+'_pix2pix_Ori_predicts'.format(os.path.split(model_path)[-1][:4])
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     file_list=os.listdir(src_dir)
     for file in file_list:
-        file_path=os.path.join(src_dir,file)
+        file_path = os.path.join(src_dir, file)
+        starttime = time.time()
         picture_strengthen(file_path)
+        endtime = time.time()
+        print(file, '_time:', round(endtime - starttime, 2))
     print('save_dir:',save_dir)
 
