@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
-from models_modified.cSEUnet import cSE
+from cSEUnet import cSE
 
 ###############################################################################
 # Helper Functions

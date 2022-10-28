@@ -24,9 +24,3 @@ class cSE(nn.Module):
 
 
 
-if __name__=='__main__':
-    model=ConvTransposeUnetscSE(3,1)
-    print(model)
-    data=torch.ones((1,3,584,565))
-    out=model(data)
-    print(out.shape)
