@@ -46,7 +46,7 @@ if __name__ == '__main__':
     t_start = time.time()
     for i, filename in enumerate(filenames):
         print('{}/{}'.format(i, len(filenames)))
-        # 执行异步并行
+        
         #num_str=str(int(filename.split('.')[0]))
         # if '_AM' in filename:
         #     save_name=filename.replace('_AM', '')
@@ -60,10 +60,9 @@ if __name__ == '__main__':
         rewrite(src_dir, filename, save_dir, save_format, size, save_name)
         #res.append(p.apply_async(rewrite, args=(src_dir, filename, save_dir, save_format, size, save_name)))
         print(str(i) + ' processor started !')
-    p.close()       # 关闭进程池（pool），使其不在接受新的任务。
-    p.join()        # 主进程阻塞等待子进程的退出， join方法要在close或terminate之后使用。
+    
     for i in res:
-        print(i.get())  # 使用get获得多进程处理的结果
+        print(i.get())  
 
 
 

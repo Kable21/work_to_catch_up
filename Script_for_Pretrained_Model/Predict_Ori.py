@@ -80,7 +80,7 @@ def picture_strengthen(file_path):
     # ------------------------------save end----------------------------------
 
 if __name__=='__main__':
-    src_dir=r'D:\GAN\pytorch-CycleGAN-and-pix2pix\Report_data\AR'
+    src_dir=r"D:\GAN\Training_data_generator\High_Resolution_resize"
     save_dir=src_dir+'_pix2pix_Ori_predicts'.format(os.path.split(model_path)[-1][:4])
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
