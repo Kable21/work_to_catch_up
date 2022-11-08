@@ -13,11 +13,11 @@ from models import create_model
 
 size = (256, 256)
 # Set cpu or GPU
-device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+# device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 device = torch.device("cpu")
 # Load Model
 # model_path=r'checkpoints/GAN_Control_Ensemble_pix2pix_aligned_Resnet256/200_net_G.pth'
-model_path=r"C:\Users\KABLE21\Desktop\Shared_Results\Trained_model\295_net_G_3_256_256_FC_jit.pt"
+model_path=r"F:\pix2pix_attention\checkpoints\pix2pix_FC\55_net_G.pth"
 starttime_load = time.time()
 if '_jit.pt' in model_path:
     GAN_generator = torch.jit.load(model_path, map_location='cpu').to(device)
@@ -97,7 +97,7 @@ def picture_strengthen(file_path):
     # ------------------------------save end----------------------------------
 
 if __name__=='__main__':
-    src_dir=r"D:\GAN\Training_data_generator\High_Resolution_resize"
+    src_dir=r"D:\GAN\pytorch-CycleGAN-and-pix2pix\datasets\half_dataset\test"
     save_dir=src_dir+'_pix2pix_FC_predicts'.format(os.path.split(model_path)[-1][:4])
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)

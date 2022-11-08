@@ -19,7 +19,7 @@ device = torch.device('cpu')
 # model_path=r'400_net_G_3_512_512_jit.pt'
 # ---------------**********************_________________
 # model_path=r'Ensemble_pix2pix_ori/200_net_G_3_256_256_jit.pt'
-model_path=r'D:\GAN\pytorch-CycleGAN-and-pix2pix\Ensemble_pix2pix_ori\295_net_G_3_256_256_jit.pt'
+model_path=r"F:\models_FC\checkpoints\pix2pix_FC\155_net_G.pth"
 
 if '_jit.pt' in model_path:
     GAN_generator = torch.jit.load(model_path, map_location='cpu').to(device)
@@ -80,7 +80,7 @@ def picture_strengthen(file_path):
     # ------------------------------save end----------------------------------
 
 if __name__=='__main__':
-    src_dir=r"D:\GAN\Training_data_generator\High_Resolution_resize"
+    src_dir=r"D:\GAN\pytorch-CycleGAN-and-pix2pix\datasets\half_dataset\test"
     save_dir=src_dir+'_pix2pix_Ori_predicts'.format(os.path.split(model_path)[-1][:4])
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
