@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 
 # load results
 # Epoch:5,MAE:0.11857, RMSE:0.34286, pearson:0.64998
-log_path = r"C:\Users\KABLE21\Desktop\Shared_Results\results(MAE)\Baseline_log_MAE.txt"
+log_path = r"F:\models\checkpoints\pix2pix\log_MAE.txt"
+# log_path = r"F:\models\checkpoints\pix2pix\log_MAE.txt"
 
 f=open(log_path,'r',encoding='UTF-8')
 # -------------- '(epoch: 1, iters: 100, time: 0.015, data: 5.072) G_GAN: 1.005 G_L1: 21.786 D_real: 0.533 D_fake: 0.728' -------
@@ -27,7 +28,7 @@ for line in f.readlines():
         # Epoch:5,MAE:0.11857, RMSE:0.34286, pearson:0.64998
         Epoch, MAE, RMSE, pearson =line.split(',')
         Epoch=int(Epoch.split(':')[-1])
-        if Epoch < 400 and Epoch!=bf_epoch:
+        if Epoch <= 400 and Epoch!=bf_epoch:
             MAE=float(MAE[4:])
             RMSE=float(RMSE[6:])
             pearson=float(pearson[9:])
@@ -38,16 +39,16 @@ for line in f.readlines():
             Epoch_all.append(Epoch)
 
             bf_epoch=Epoch
-            print(line)
+            # print(line)
         if Epoch > 400:
             break
 
 Baseline_MAE_all=MAE_all.copy()
+print(Baseline_MAE_all)
 
-
-log_path = r"C:\Users\KABLE21\Desktop\Shared_Results\results(MAE)\FC_log_MAE.txt"
+log_path = r"F:\pix2pix_FC\checkpoints\pix2pix_FC\log_MAE.txt"
 f=open(log_path,'r',encoding='UTF-8')
-# -------------- '(epoch: 1, iters: 100, time: 0.015, data: 5.072) G_GAN: 1.005 G_L1: 21.786 D_real: 0.533 D_fake: 0.728' -------
+
 MAE_all_2=[]
 RMSE_all=[]
 pearson_all=[]
@@ -60,7 +61,7 @@ for line in f.readlines():
         # Epoch:5,MAE:0.11857, RMSE:0.34286, pearson:0.64998
         Epoch, MAE, RMSE, pearson =line.split(',')
         Epoch=int(Epoch.split(':')[-1])
-        if Epoch < 400 and Epoch!=bf_epoch:
+        if Epoch <= 400 and Epoch!=bf_epoch:
             MAE=float(MAE[4:])
             RMSE=float(RMSE[6:])
             pearson=float(pearson[9:])
@@ -71,14 +72,16 @@ for line in f.readlines():
             Epoch_all.append(Epoch)
 
             bf_epoch=Epoch
-            print(line)
+            # print(line)
         if Epoch > 400:
             break
 
 
 results_list=[Baseline_MAE_all,MAE_all_2]
+print(results_list[0])
 # save directory
 save_dir='results'
+print(save_dir)
 if not os.path.exists(save_dir):
     os.makedirs(save_dir)
 
@@ -121,7 +124,7 @@ plt.ylabel('MAE', fontsize=15)
 # set the limitation of x
 # plt.xlim([0, 300])
 # set the limitation of y
-plt.ylim([0.07, 0.14])
+plt.ylim([0.07, 0.20])
 
 # save figure
 plt.savefig(os.path.join(save_dir, log_path.split('/')[-1][:-4]+'_MAE_Ensemble.png'), dpi=200, bbox_inches='tight')

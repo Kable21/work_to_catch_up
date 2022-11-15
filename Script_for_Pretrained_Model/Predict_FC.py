@@ -3,6 +3,7 @@ import torch
 from PIL import Image
 import numpy as np
 import torch.nn.functional as F
+import torch.nn as nn
 import torchvision.transforms as transforms
 import shutil
 import time
@@ -17,16 +18,21 @@ size = (256, 256)
 device = torch.device("cpu")
 # Load Model
 # model_path=r'checkpoints/GAN_Control_Ensemble_pix2pix_aligned_Resnet256/200_net_G.pth'
-model_path=r"F:\pix2pix_attention\checkpoints\pix2pix_FC\55_net_G.pth"
-starttime_load = time.time()
+model_path=r"F:\pix2pix_FC\checkpoints\pix2pix_FC\295_net_G.pth"
+
+# starttime_load = time.time()
 if '_jit.pt' in model_path:
     GAN_generator = torch.jit.load(model_path, map_location='cpu').to(device)
 else:
     GAN_generator = torch.load(model_path, map_location='cpu').to(device)
+    if isinstance(GAN_generator,nn.DataParallel):
+        GAN_generator=GAN_generator.module
+
 GAN_generator.eval()
-endtime_load = time.time()
+GAN_generator=GAN_generator.to(device)
+# endtime_load = time.time()
 print('model:',GAN_generator)
-print('loadtime:',round(endtime_load-starttime_load,2))
+# print('loadtime:',round(endtime_load-starttime_load,2))
 
 
 # ---Calculate parameters---
@@ -49,7 +55,7 @@ def get_transform():
 # Preprocessing
 G_transform = get_transform()
 
-def picture_strengthen(file_path):
+def picture_strengthen(file_path,GAN_generator,device):
     # Read images
     test_img = cv2.imdecode(np.fromfile(file_path, dtype=np.uint8), 1)[:, :, ::-1]
     # Copy original data
@@ -67,10 +73,11 @@ def picture_strengthen(file_path):
     #  forward propagation
     if '-' in file_path:
         file_path=file_path.replace('-','')
-    A,B,VR=os.path.split(file_path)[-1][:-4].split('_')[:3]
-    AP= float(A)/float(B)
-    volume = float(VR)
-    generated = GAN_generator.forward(img, torch.Tensor([AP])/4.0, torch.Tensor([volume]))
+    A,B,VF = os.path.split(file_path)[-1][:-4].split('_')[:3]
+    AR = float(A)/float(B)
+    VF = float(VF)
+    GAN_generator=GAN_generator.to(device)
+    generated = GAN_generator.forward(img, torch.Tensor([AR]).to(device)/4.0, torch.Tensor([VF]).to(device))
     # read image
     image_numpy = generated.data[0].cpu().float().numpy()
     # transpose chanel
@@ -106,7 +113,8 @@ if __name__=='__main__':
     for file in file_list:
         file_path = os.path.join(src_dir, file)
         starttime = time.time()
-        picture_strengthen(file_path)
+
+        picture_strengthen(file_path,GAN_generator,device=device)
         endtime = time.time()
         print(file,'_time:', round(endtime - starttime,2))
     print('save_dir:',save_dir)
